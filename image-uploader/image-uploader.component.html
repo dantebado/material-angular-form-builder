@@ -1,0 +1,12 @@
+<div style="text-align: center;">
+  <img *ngIf="currentURL && !uploading" class="current-image" [src]="currentURL" alt="">
+  <mat-spinner style="margin: auto;" *ngIf="uploading"></mat-spinner>
+</div>
+<div>
+  <ngx-dropzone (change)="onImageSelect($event)" style="height: 35px; overflow: hidden;">
+    <ngx-dropzone-label>Arrastrá tu imagen aquí</ngx-dropzone-label>
+    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f">
+      <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+    </ngx-dropzone-image-preview>
+  </ngx-dropzone>
+</div>

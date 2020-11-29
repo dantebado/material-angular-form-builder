@@ -1,0 +1,63 @@
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .form-col {
+    padding: 0.25rem;
+    box-sizing: border-box;
+
+    &.form-col-1 {
+      width: calc((100% / 12) * 1);
+    }
+    &.form-col-2 {
+      width: calc((100% / 12) * 2);
+    }
+    &.form-col-3 {
+      width: calc((100% / 12) * 3);
+    }
+    &.form-col-4 {
+      width: calc((100% / 12) * 4);
+    }
+    &.form-col-5 {
+      width: calc((100% / 12) * 5);
+    }
+    &.form-col-6 {
+      width: calc((100% / 12) * 6);
+    }
+    &.form-col-7 {
+      width: calc((100% / 12) * 7);
+    }
+    &.form-col-8 {
+      width: calc((100% / 12) * 8);
+    }
+    &.form-col-9 {
+      width: calc((100% / 12) * 9);
+    }
+    &.form-col-10 {
+      width: calc((100% / 12) * 10);
+    }
+    &.form-col-11 {
+      width: calc((100% / 12) * 11);
+    }
+    &.form-col-12 {
+      width: calc((100% / 12) * 12);
+    }
+  }
+}
+
+mat-radio-group {
+  mat-label {
+    display: block;
+    text-align: left;
+  }
+  mat-radio-button {
+    display: block;
+  }
+}
+div.image-uploader {
+  mat-label {
+    display: block;
+    text-align: left;
+  }
+}

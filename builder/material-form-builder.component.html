@@ -1,0 +1,140 @@
+<p *ngIf="!form">Invalid form data</p>
+<ng-container *ngIf="form">
+  <h1 *ngIf="form.title">{{ form.title }}</h1>
+
+  <div *ngFor="let row of form.rows" class="form-row" >
+    <div class="form-col form-col-{{ (field.width) ? field.width : (12 / row.cols.length) }}" *ngFor="let field of row.cols">
+
+      <mat-form-field *ngIf="field.type == 'text'">
+        <mat-label>{{ field.label || 'Título del Input' }}</mat-label>
+        <input matInput
+          type="text"
+          [placeholder]="field.placeholder || ''"
+          value="{{ field.default }}"
+          [required]="field.required ? true : false"
+          name="{{ field.name }}"
+          [(ngModel)]="field.donotset"
+          (ngModelChange)="field.binding($event)">
+      </mat-form-field>
+
+      <mat-form-field *ngIf="field.type == 'email'">
+        <mat-label>{{ field.label || 'Correo Electrónico' }}</mat-label>
+        <input matInput
+          type="email"
+          [placeholder]="field.placeholder || ''"
+          value="{{ field.default }}"
+          [required]="field.required ? true : false"
+          name="{{ field.name }}"
+          [(ngModel)]="field.donotset"
+          (ngModelChange)="field.binding($event)">
+      </mat-form-field>
+
+      <mat-form-field *ngIf="field.type == 'password'">
+        <mat-label>{{ field.label || 'Contraseña' }}</mat-label>
+        <input matInput
+          type="password"
+          [placeholder]="field.placeholder || ''"
+          value="{{ field.default }}"
+          [required]="field.required ? true : false"
+          name="{{ field.name }}"
+          [(ngModel)]="field.donotset"
+          (ngModelChange)="field.binding($event)">
+      </mat-form-field>
+
+      <mat-form-field *ngIf="field.type == 'number'">
+        <mat-label>{{ field.label || 'Número' }}</mat-label>
+        <input matInput
+          type="number"
+          [max]="field.max || 999999999"
+          [min]="field.min || -999999999"
+          [step]="field.step || 1"
+          [placeholder]="field.placeholder || ''"
+          value="{{ field.default }}"
+          [required]="field.required ? true : false"
+          name="{{ field.name }}"
+          [(ngModel)]="field.donotset"
+          (ngModelChange)="field.binding($event)">
+      </mat-form-field>
+
+      <mat-form-field *ngIf="field.type == 'textarea'">
+        <mat-label>{{ field.label || 'Área de Texto' }}</mat-label>
+        <textarea matInput
+          [placeholder]="field.placeholder || ''"
+          value="{{ field.default }}"
+          [required]="field.required ? true : false"
+          name="{{ field.name }}"
+          [(ngModel)]="field.donotset"
+          (ngModelChange)="field.binding($event)">
+          ></textarea>
+      </mat-form-field>
+
+      <mat-radio-group *ngIf="field.type == 'radio'" name="{{ field.name }}">
+        <mat-label>{{ field.label || 'Elegí una opción' }}</mat-label>
+        <mat-radio-button
+          *ngFor="let option of field.options"
+          [value]="option.value"
+          (change)="field.binding($event.value)"
+          [required]="field.required ? true : false"
+          [checked]=" (field.default != null) ? (field.default == option.value) : false " >{{ option.display }}</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field *ngIf="field.type == 'select'">
+        <mat-label>{{ field.label || 'Elegí una opción' }}</mat-label>
+        <mat-select [value]="field.default" [required]="field.required ? true : false" [(ngModel)]="field.donotset" (ngModelChange)="field.binding($event)">
+          <mat-option
+            *ngFor="let option of field.options"
+            [value]="option.value">{{ option.display }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="field.type == 'date'">
+        <mat-label>{{ field.label || 'Ingresá la fecha' }}</mat-label>
+        <input matInput
+          [matDatepicker]="picker"
+          [name]="field.name"
+          [(ngModel)]="field.donotset"
+          [required]="field.required ? true : false"
+          (ngModelChange)="field.binding($event)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <div *ngIf="field.type == 'time'">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <mat-form-field style="width: 50%;">
+            <mat-label>Hora</mat-label>
+            <mat-select #hourpicker [(ngModel)]="field.donotset.hour" (ngModelChange)="timeModelChange(hourpicker, minutespicker, field)">
+              <mat-option
+                *ngFor="let hour of getRangeOfHours()"
+                [value]="hour">{{ hour }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field style="width: 50%;">
+            <mat-label>Minutos</mat-label>
+            <mat-select #minutespicker [(ngModel)]="field.donotset.minutes" (ngModelChange)="timeModelChange(hourpicker, minutespicker, field)">
+              <mat-option
+                *ngFor="let minute of getRangeOfMinutes()"
+                [value]="minute">{{ minute }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngIf="field.type == 'image'" class="image-uploader">
+        <mat-label>{{ field.label || 'Subí tu Imagen' }}</mat-label>
+        <app-image-uploader [uploadFunction]="field.uploadFunction" [callback]="field.uploadCallback"></app-image-uploader>
+      </div>
+
+      <div *ngIf="field.type == 'submit'">
+        <button
+          type="submit"
+          mat-raised-button
+          class="block"
+          [disabled]=" (field.disabled) ? (field.disabled()) : (false) "
+          color="primary">
+            {{ field.placeholder || 'Enviar' }}</button>
+      </div>
+
+    </div>
+  </div>
+</ng-container>
