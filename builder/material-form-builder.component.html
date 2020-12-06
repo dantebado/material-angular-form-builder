@@ -10,7 +10,7 @@
         <input matInput
           type="text"
           [placeholder]="field.placeholder || ''"
-          value="{{ field.default }}"
+          value="{{ field.defvalue }}"
           [required]="field.required ? true : false"
           name="{{ field.name }}"
           [(ngModel)]="field.donotset"
@@ -22,7 +22,7 @@
         <input matInput
           type="email"
           [placeholder]="field.placeholder || ''"
-          value="{{ field.default }}"
+          value="{{ field.defvalue }}"
           [required]="field.required ? true : false"
           name="{{ field.name }}"
           [(ngModel)]="field.donotset"
@@ -34,7 +34,7 @@
         <input matInput
           type="password"
           [placeholder]="field.placeholder || ''"
-          value="{{ field.default }}"
+          value="{{ field.defvalue }}"
           [required]="field.required ? true : false"
           name="{{ field.name }}"
           [(ngModel)]="field.donotset"
@@ -49,7 +49,7 @@
           [min]="field.min || -999999999"
           [step]="field.step || 1"
           [placeholder]="field.placeholder || ''"
-          value="{{ field.default }}"
+          [value]="field.defvalue"
           [required]="field.required ? true : false"
           name="{{ field.name }}"
           [(ngModel)]="field.donotset"
@@ -60,7 +60,7 @@
         <mat-label>{{ field.label || 'Área de Texto' }}</mat-label>
         <textarea matInput
           [placeholder]="field.placeholder || ''"
-          value="{{ field.default }}"
+          value="{{ field.defvalue }}"
           [required]="field.required ? true : false"
           name="{{ field.name }}"
           [(ngModel)]="field.donotset"
@@ -75,12 +75,12 @@
           [value]="option.value"
           (change)="field.binding($event.value)"
           [required]="field.required ? true : false"
-          [checked]=" (field.default != null) ? (field.default == option.value) : false " >{{ option.display }}</mat-radio-button>
+          [checked]=" (field.defvalue != null) ? (field.defvalue == option.value) : false " >{{ option.display }}</mat-radio-button>
       </mat-radio-group>
 
       <mat-form-field *ngIf="field.type == 'select'">
         <mat-label>{{ field.label || 'Elegí una opción' }}</mat-label>
-        <mat-select [value]="field.default" [required]="field.required ? true : false" [(ngModel)]="field.donotset" (ngModelChange)="field.binding($event)">
+        <mat-select [value]="field.defvalue" [required]="field.required ? true : false" [(ngModel)]="field.donotset" (ngModelChange)="field.binding($event)">
           <mat-option
             *ngFor="let option of field.options"
             [value]="option.value">{{ option.display }}</mat-option>
@@ -120,9 +120,37 @@
         </div>
       </div>
 
+      <div *ngIf="field.type == 'currency_amount'">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <mat-form-field style="width: 50%;">
+            <mat-label>Moneda</mat-label>
+            <mat-select #currencypicker [(ngModel)]="field.donotset.currency" (ngModelChange)="currencyModelChange(currencypicker.selected, amountpicker.value, field)">
+              <mat-option
+                *ngFor="let currency of field.options"
+                [value]="currency.value">{{ currency.display }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field style="width: 50%;">
+            <mat-label>Monto</mat-label>
+            <input matInput
+              type="number"
+              [max]="field.max || 999999999"
+              [min]="field.min || -999999999"
+              [step]="field.step || 1"
+              [placeholder]="field.placeholder || ''"
+              value="{{ field.defvalue.amount }}"
+              [required]="field.required ? true : false"
+              name="{{ field.name }}"
+              [(ngModel)]="field.donotset.amount"
+              #amountpicker
+              (ngModelChange)="currencyModelChange(currencypicker.selected, amountpicker.value, field)">
+          </mat-form-field>
+        </div>
+      </div>
+
       <div *ngIf="field.type == 'image'" class="image-uploader">
         <mat-label>{{ field.label || 'Subí tu Imagen' }}</mat-label>
-        <app-image-uploader [uploadFunction]="field.uploadFunction" [callback]="field.uploadCallback"></app-image-uploader>
+        <app-image-uploader [currentURL]="field.defvalue" [uploadFunction]="field.uploadFunction" [callback]="field.uploadCallback"></app-image-uploader>
       </div>
 
       <div *ngIf="field.type == 'submit'">
@@ -137,4 +165,5 @@
 
     </div>
   </div>
+  <br>
 </ng-container>

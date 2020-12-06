@@ -32,17 +32,17 @@ export class ImageUploaderComponent implements OnInit {
       this.readFile(this.files[0]).then(fileContents => {
         this.uploading = true;
         this.uploadFunction(fileContents)
-          .toPromise()
-          .then(res => {
-            this.currentURL = res.url
-            this.notifyNewImageURL(this.currentURL, event)
-          })
-          .catch(err => {
-            this.onImageRemove(event);
-          })
-          .finally(() => {
-            this.uploading = false;
-          })
+          .subscribe(
+            (res) => {
+              this.currentURL = res.url
+              this.notifyNewImageURL(this.currentURL, event)
+              this.uploading = false;
+            },
+            (err) => {
+              this.onImageRemove(event);
+              this.uploading = false;
+            }
+          )
       });
     } catch (error) {
       this.uploading = false;
@@ -51,17 +51,17 @@ export class ImageUploaderComponent implements OnInit {
   }
 
   notifyNewImageURL(url: string, event) {
-    this.http.get<any>(url)
+    /*this.http.get<any>(url)
       .toPromise()
       .then(val => {
-        this.callback(url)
       })
       .catch(err => {
         this.currentURL = this.originalURL
         this.onImageRemove(event);
         this.callback(this.currentURL)
         throw err
-      })
+      })*/
+    this.callback(url)
   }
 
   onImageRemove(event) {
